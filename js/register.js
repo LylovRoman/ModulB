@@ -20,8 +20,9 @@ button.addEventListener('click', function (){
         return response.json();
     })
     .then((data) => {
-        localStorage.setItem('TOKEN', data.data.token)
-        window.location.href = 'profile.html';
+        console.log(data);
+        //localStorage.setItem('TOKEN', data.data.user_token)
+        window.location.href = '/register.html';
     }).catch((error) => {
         error.then(result => {
             console.log(result)
@@ -33,3 +34,14 @@ button.addEventListener('click', function (){
         });
     });
 });
+/*
+button2.addEventListener('click', function (){
+    fetch('http://firstcafe.com/api-cafe/users', {
+        headers: {
+            'Authorization': "Bearer " + localStorage.getItem('TOKEN')
+        }
+    })
+        .then((response) => response.json())
+        .then((data) => console.log(data));
+});
+*/
