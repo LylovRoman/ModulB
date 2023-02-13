@@ -20,7 +20,7 @@ button.addEventListener('click', function (){
     })
     .then((data) => {
         localStorage.setItem('TOKEN', data.data.token)
-        window.location.href = '/';
+        window.location.href = 'login.js';
     }).catch((error) => {
         error.then(result => {
             console.log(result)

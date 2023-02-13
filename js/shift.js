@@ -31,14 +31,3 @@ button.addEventListener('click', function (){
         });
     });
 });
-/*
-button2.addEventListener('click', function (){
-    fetch('http://firstcafe.com/api-cafe/users', {
-        headers: {
-            'Authorization': "Bearer " + localStorage.getItem('TOKEN')
-        }
-    })
-        .then((response) => response.json())
-        .then((data) => console.log(data));
-});
-*/

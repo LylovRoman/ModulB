@@ -41,3 +41,6 @@ body {
 .hidden {
     display: none;
 }
+.margin-left {
+    margin: 0px 20px;
+}
