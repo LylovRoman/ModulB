@@ -23,7 +23,8 @@ fetch('http://yarko.ct25692.tw1.ru/api/order', {
     return response.json();
 })
 .then((data) => {
-    th.innerHTML = "ID";
+    console.log(data);
+    th.innerHTML = "Номер заказа";
     th.classList.add('border-slate-300');
     th.classList.add('border');
     th.classList.add('border-dark');
@@ -31,7 +32,7 @@ fetch('http://yarko.ct25692.tw1.ru/api/order', {
     th.classList.add('bg-[#ffffff]');
     row.appendChild(th);
     th = document.createElement('th');
-    th.innerHTML = "ID Клиента";
+    th.innerHTML = "Имя клиента";
     th.classList.add('border-slate-300');
     th.classList.add('border');
     th.classList.add('border-dark');
@@ -39,7 +40,7 @@ fetch('http://yarko.ct25692.tw1.ru/api/order', {
     th.classList.add('bg-[#ffffff]');
     row.appendChild(th);
     th = document.createElement('th');
-    th.innerHTML = "ID Мастера";
+    th.innerHTML = "Имя мастера";
     th.classList.add('border-slate-300');
     th.classList.add('border');
     th.classList.add('border-dark');
@@ -47,7 +48,7 @@ fetch('http://yarko.ct25692.tw1.ru/api/order', {
     th.classList.add('bg-[#ffffff]');
     row.appendChild(th);
     th = document.createElement('th');
-    th.innerHTML = "ID статуса";
+    th.innerHTML = "Статус";
     th.classList.add('border-slate-300');
     th.classList.add('border');
     th.classList.add('border-dark');
@@ -83,7 +84,7 @@ fetch('http://yarko.ct25692.tw1.ru/api/order', {
         column.classList.add('bg-[#ffffff]');
         row.appendChild(column);
         column = document.createElement('td');
-        column.innerHTML = el.client_id;
+        column.innerHTML = el.client.name;
         column.classList.add('border-slate-300');
         column.classList.add('border');
         column.classList.add('border-dark');
@@ -91,7 +92,7 @@ fetch('http://yarko.ct25692.tw1.ru/api/order', {
         column.classList.add('bg-[#ffffff]');
         row.appendChild(column);
         column = document.createElement('td');
-        column.innerHTML = el.master_id;
+        column.innerHTML = el.master ? el.master.name : "не назначен";
         column.classList.add('border-slate-300');
         column.classList.add('border');
         column.classList.add('border-dark');
@@ -99,7 +100,7 @@ fetch('http://yarko.ct25692.tw1.ru/api/order', {
         column.classList.add('bg-[#ffffff]');
         row.appendChild(column);
         column = document.createElement('td');
-        column.innerHTML = el.status_id;
+        column.innerHTML = el.status;
         column.classList.add('border-slate-300');
         column.classList.add('border');
         column.classList.add('border-dark');
@@ -134,7 +135,7 @@ fetch('http://yarko.ct25692.tw1.ru/api/order', {
                     ul = document.createElement('ul');
                     data.forEach(el => {
                         li = document.createElement('li');
-                        li.innerHTML = el.name + ' - ' + el.price;
+                        li.innerHTML = el.name + ' - ' + el.price + ' руб.';
                         ul.appendChild(li)
                     })
                     td.appendChild(ul);
