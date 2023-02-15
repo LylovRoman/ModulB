@@ -4,6 +4,7 @@ let select = document.createElement('select');
 let option = document.createElement('option');
 let button = document.createElement('button');
 let p = document.createElement('p');
+let a = document.createElement('a');
 let ul = document.createElement('ul');
 let li = document.createElement('li');
 fetch('http://yarko.ct25692.tw1.ru/api/shift/' + window.location.search.replace( '?id=', ''), {
@@ -43,76 +44,105 @@ fetch('http://yarko.ct25692.tw1.ru/api/shift/' + window.location.search.replace(
             })
             .then((data) => {
                 ul = document.createElement('ul');
+                let names = [];
                 data.forEach(el => {
                     li = document.createElement('li');
+                    a = document.createElement('a');
+                    a.innerHTML = ' x ';
+                    a.addEventListener('click', function (){
+                        fetch('http://yarko.ct25692.tw1.ru/api/shift/' + window.location.search.replace( '?id=', '') + '/worker/' + el.id, {
+                            method: 'DELETE',
+                            headers: {
+                                'Authorization': 'Bearer ' + localStorage.getItem('TOKEN')
+                            }
+                        })
+                            .then((response) => {
+                                if (response.status > 300) {
+                                    throw response.json();
+                                }
+                                return response.json();
+                            })
+                            .then((data) => {
+                                window.location.href = 'shiftSingle.html' + window.location.search;
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                                error.then(result => {
+
+                                });
+                            })
+                    })
                     li.innerHTML = el.name;
+                    names.push(el.name);
+                    li.appendChild(a);
                     wrapper.appendChild(li);
                 })
                 wrapper.appendChild(ul);
-            }).catch((error) => {
-            error.then(result => {
-
-            });
-        });
-
-        p = document.createElement('span');
-        p.innerHTML = 'Назначить на смену:';
-        wrapper.appendChild(p);
-        fetch('http://yarko.ct25692.tw1.ru/api/worker', {
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('TOKEN')
-            },
-        })
-            .then((response) => {
-                if (response.status > 300) {
-                    throw response.json();
-                }
-                return response.json();
-            })
-            .then((data) => {
-                ul = document.createElement('select');
-                button = document.createElement('button');
-                button.innerHTML = "Добавить";
-                button.addEventListener('click', function (){
-                    fetch('http://yarko.ct25692.tw1.ru/api/shift/' + window.location.search.replace( '?id=', '') + '/worker', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json;charset=utf-8',
-                            'Authorization': 'Bearer ' + localStorage.getItem('TOKEN')
-                        },
-                        body: JSON.stringify({
-                            user_id: ul.value
-                        })
+                p = document.createElement('span');
+                p.innerHTML = 'Назначить на смену:';
+                wrapper.appendChild(p);
+                fetch('http://yarko.ct25692.tw1.ru/api/worker', {
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('TOKEN')
+                    },
+                })
+                    .then((response) => {
+                        if (response.status > 300) {
+                            throw response.json();
+                        }
+                        return response.json();
                     })
-                        .then((response) => {
-                            if (response.status > 300) {
-                                throw response.json();
-                            }
-                            return response.json();
-                        })
-                        .then((data) => {
-                            console.log(data)
-                        }).catch((error) => {
-                        error.then(result => {
+                    .then((data) => {
+                        ul = document.createElement('select');
+                        button = document.createElement('button');
+                        button.innerHTML = "Добавить";
+                        button.addEventListener('click', function (){
+                            fetch('http://yarko.ct25692.tw1.ru/api/shift/' + window.location.search.replace( '?id=', '') + '/worker', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json;charset=utf-8',
+                                    'Authorization': 'Bearer ' + localStorage.getItem('TOKEN')
+                                },
+                                body: JSON.stringify({
+                                    user_id: ul.value
+                                })
+                            })
+                                .then((response) => {
+                                    if (response.status > 300) {
+                                        throw response.json();
+                                    }
+                                    return response.json();
+                                })
+                                .then((data) => {
+                                    window.location.href = 'shiftSingle.html' + window.location.search;
+                                }).catch((error) => {
+                                error.then(result => {
 
+                                });
+                            });
                         });
+                        data.forEach(el => {
+                            if (!names.includes(el.name)){
+                                li = document.createElement('option');
+                                li.innerHTML = el.name;
+                                li.value = el.id;
+                                ul.appendChild(li);
+                            }
+                        })
+                        wrapper.appendChild(ul);
+                        wrapper.appendChild(button);
+                    }).catch((error) => {
+                    error.then(result => {
+
                     });
                 });
-                data.forEach(el => {
-                    li = document.createElement('option');
-                    li.innerHTML = el.name;
-                    li.value = el.id;
-                    ul.appendChild(li);
-                })
-                wrapper.appendChild(ul);
-                wrapper.appendChild(button);
+            }).catch((error) => {
+            error.then(result => {
+
+            });
             }).catch((error) => {
             error.then(result => {
 
             });
         });
-    }).catch((error) => {
-    error.then(result => {
-
-    });
 });
