@@ -2,15 +2,17 @@ let button = document.querySelector(".button");
 let message = document.querySelector(".message");
 button.addEventListener('click', function (){
     message.classList.add('hidden');
-    fetch('http://yarko.ct25692.tw1.ru/api/register', {
+    fetch('http://yarko.ct25692.tw1.ru/api/user', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json;charset=utf-8'
+            'Content-Type': 'application/json;charset=utf-8',
+            'Authorization': 'Bearer ' + localStorage.getItem('TOKEN')
         },
         body: JSON.stringify({
             login: document.querySelector("input[name=login]").value,
             password: document.querySelector("input[name=password]").value,
-            name: document.querySelector("input[name=name]").value
+            name: document.querySelector("input[name=name]").value,
+            role_id: document.querySelector("input[name=role_id]").value
         })
     })
     .then((response) => {
@@ -21,8 +23,6 @@ button.addEventListener('click', function (){
     })
     .then((data) => {
         console.log(data);
-        localStorage.setItem('TOKEN', data.data.token)
-        window.location.href = 'index.html';
     }).catch((error) => {
         error.then(result => {
             console.log(result)
@@ -34,14 +34,3 @@ button.addEventListener('click', function (){
         });
     });
 });
-/*
-button2.addEventListener('click', function (){
-    fetch('http://firstcafe.com/api-cafe/users', {
-        headers: {
-            'Authorization': "Bearer " + localStorage.getItem('TOKEN')
-        }
-    })
-        .then((response) => response.json())
-        .then((data) => console.log(data));
-});
-*/
