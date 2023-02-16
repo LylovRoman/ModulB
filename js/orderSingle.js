@@ -10,7 +10,7 @@ let li = document.createElement('li');
 if (!window.location.search) {
     window.location.href = 'index.html';
 }
-fetch('http://yarko.ct25692.tw1.ru/api/shift/' + window.location.search.replace( '?id=', ''), {
+fetch('http://yarko.ct25692.tw1.ru/api/order/' + window.location.search.replace( '?id=', ''), {
     headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('TOKEN')
     },
@@ -20,7 +20,6 @@ fetch('http://yarko.ct25692.tw1.ru/api/shift/' + window.location.search.replace(
             if (response.status == 401) {
                 window.location.href = 'index.html';
             }
-            throw response.json();
         }
         return response.json();
     })
@@ -73,7 +72,7 @@ fetch('http://yarko.ct25692.tw1.ru/api/shift/' + window.location.search.replace(
                             })
                             .catch((error) => {
                                 error.then(result => {
-                                    console.log(result);
+
                                 });
                             })
                     })
@@ -138,13 +137,16 @@ fetch('http://yarko.ct25692.tw1.ru/api/shift/' + window.location.search.replace(
                         wrapper.appendChild(button);
                     }).catch((error) => {
                     error.then(result => {
-                        console.log(result);
+
                     });
                 });
-            })
-    .catch((error) => {
-        error.then(result => {
-            console.log(result);
+            }).catch((error) => {
+            error.then(result => {
+
+            });
+        }).catch((error) => {
+            error.then(result => {
+
+            });
         });
     });
-});

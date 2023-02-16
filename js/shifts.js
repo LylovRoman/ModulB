@@ -20,7 +20,9 @@ fetch('http://yarko.ct25692.tw1.ru/api/shift', {
 })
     .then((response) => {
         if (response.status > 300) {
-            throw response.json();
+            if (response.status == 401) {
+                window.location.href = 'index.html';
+            }
         }
         return response.json();
     })
@@ -58,7 +60,7 @@ fetch('http://yarko.ct25692.tw1.ru/api/shift', {
         th.classList.add('bg-[#ffffff]');
         row.appendChild(th);
         th = document.createElement('th');
-        th.innerHTML = "Мастера";
+        th.innerHTML = "Подробнее";
         th.classList.add('border-slate-300');
         th.classList.add('border');
         th.classList.add('border-dark');
@@ -102,71 +104,15 @@ fetch('http://yarko.ct25692.tw1.ru/api/shift', {
             column.classList.add('bg-[#ffffff]');
             row.appendChild(column);
             column = document.createElement('td');
-            button = document.createElement('button');
-            button.addEventListener('click', function () {
-                fetch('http://yarko.ct25692.tw1.ru/api/shift/' + el.id + '/worker', {
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem('TOKEN')
-                    },
-                })
-                    .then((response) => {
-                        if (response.status > 300) {
-                            throw response.json();
-                        }
-                        return response.json();
-                    })
-                    .then((data) => {
-                        console.log(data);
-                        td = this.parentNode;
-                        td.innerHTML = null;
-                        ul = document.createElement('ul');
-                        data.forEach(el => {
-                            li = document.createElement('li');
-                            li.innerHTML = 'sss';
-                            ul.appendChild(li)
-                        })
-                        td.appendChild(ul);
-
-                        select = document.createElement('select');
-                        fetch('http://yarko.ct25692.tw1.ru/api/worker', {
-                            headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem('TOKEN')
-                            },
-                        })
-                            .then((response) => {
-                                if (response.status > 300) {
-                                    throw response.json();
-                                }
-                                return response.json();
-                            })
-                            .then((data) => {
-                                data.forEach(elem => {
-                                    option = document.createElement('option');
-                                    option.innerHTML = elem.name;
-                                    select.appendChild(option);
-                                });
-                            })
-                            .catch((error) => {
-                                error.then(result => {
-
-                                });
-                            });
-                        td.appendChild(select);
-                    })
-                    .catch((error) => {
-                        error.then(result => {
-
-                        });
-                    });
-            })
-            button.classList.add('bg-success');
-            button.innerHTML = 'Показать';
+            a = document.createElement('a');
+            a.innerHTML = 'Подробнее';
+            a.href = 'shiftSingle.html?id=' + el.id;
             column.classList.add('border-slate-300');
             column.classList.add('border');
             column.classList.add('border-dark');
             column.classList.add('text-center');
             column.classList.add('bg-[#ffffff]');
-            column.appendChild(button);
+            column.appendChild(a);
             row.appendChild(column);
             table.appendChild(row);
         })
