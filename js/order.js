@@ -9,7 +9,7 @@ fetch('http://yarko.ct25692.tw1.ru/api/product', {
     .then((response) => {
         if (response.status > 300) {
             if (response.status == 401) {
-                window.location.href = 'index.html';
+                window.location.href = 'login.html';
             }
         }
         return response.json();

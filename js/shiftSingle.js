@@ -18,7 +18,7 @@ fetch('http://yarko.ct25692.tw1.ru/api/shift/' + window.location.search.replace(
     .then((response) => {
         if (response.status > 300) {
             if (response.status == 401) {
-                window.location.href = 'index.html';
+                window.location.href = 'login.html';
             }
             throw response.json();
         }
@@ -136,11 +136,7 @@ fetch('http://yarko.ct25692.tw1.ru/api/shift/' + window.location.search.replace(
                         })
                         wrapper.appendChild(ul);
                         wrapper.appendChild(button);
-                    }).catch((error) => {
-                    error.then(result => {
-                        console.log(result);
-                    });
-                });
+                    })
             })
     .catch((error) => {
         error.then(result => {

@@ -24,7 +24,7 @@ button.addEventListener('click', function (){
     .then((data) => {
         console.log(data);
         localStorage.setItem('TOKEN', data.data.token)
-        window.location.href = 'index.html';
+        window.location.href = 'login.html';
     }).catch((error) => {
         error.then(result => {
             console.log(result)

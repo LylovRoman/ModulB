@@ -17,7 +17,7 @@ button.addEventListener('click', function (){
     .then((response) => {
         if (response.status > 300) {
             if (response.status == 401) {
-                window.location.href = 'index.html';
+                window.location.href = 'login.html';
             }
         }
         return response.json();

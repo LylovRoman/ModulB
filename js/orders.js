@@ -19,7 +19,7 @@ fetch('http://yarko.ct25692.tw1.ru/api/order', {
 .then((response) => {
     if (response.status > 300) {
         if (response.status == 401) {
-            window.location.href = 'index.html';
+            window.location.href = 'login.html';
         }
     }
     return response.json();
@@ -118,37 +118,8 @@ fetch('http://yarko.ct25692.tw1.ru/api/order', {
         column.classList.add('bg-[#ffffff]');
         row.appendChild(column);
         column = document.createElement('td');
-        button = document.createElement('button');
-        button.addEventListener('click', function () {
-            fetch('http://yarko.ct25692.tw1.ru/api/order/' + el.id + '/product', {
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('TOKEN')
-                },
-            })
-                .then((response) => {
-                    if (response.status > 300) {
-                        throw response.json();
-                    }
-                    return response.json();
-                })
-                .then((data) => {
-                    td = this.parentNode;
-                    td.innerHTML = null;
-                    ul = document.createElement('ul');
-                    data.forEach(el => {
-                        li = document.createElement('li');
-                        li.innerHTML = el.name + ' - ' + el.price + ' руб.';
-                        ul.appendChild(li)
-                    })
-                    td.appendChild(ul);
-                })
-                .catch((error) => {
-                error.then(result => {
-
-                });
-            });
-        })
-        button.classList.add('bg-success');
+        button = document.createElement('a');
+        button.href = 'orderSingle.html?id=' + el.id;
         button.innerHTML = 'Показать';
         column.classList.add('border-slate-300');
         column.classList.add('border');

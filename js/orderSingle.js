@@ -18,135 +18,106 @@ fetch('http://yarko.ct25692.tw1.ru/api/order/' + window.location.search.replace(
     .then((response) => {
         if (response.status > 300) {
             if (response.status == 401) {
-                window.location.href = 'index.html';
+                window.location.href = 'login.html';
             }
         }
         return response.json();
     })
     .then((data) => {
         p = document.createElement('p');
-        p.innerHTML = 'Открытие: ' + data.opened_at;
+        p.innerHTML = 'Имя клиента: ' + data.client.name;
         wrapper.appendChild(p);
         p = document.createElement('p');
-        p.innerHTML = 'Закрытие: ' + data.closed_at;
+        p.innerHTML = 'Имя мастера: ' + (data.master ? data.master : 'не указано');
         wrapper.appendChild(p);
         p = document.createElement('p');
         p.innerHTML = 'Статус: ' + data.status;
         wrapper.appendChild(p);
         p = document.createElement('p');
-        p.innerHTML = 'Работники:';
+        p.innerHTML = 'Стоимость: ' + data.total_price;
         wrapper.appendChild(p);
-        fetch('http://yarko.ct25692.tw1.ru/api/shift/' + window.location.search.replace( '?id=', '') + '/worker', {
+
+        ul = document.createElement('select');
+        button = document.createElement('button');
+        button.innerHTML = "Установить статус";
+        button.addEventListener('click', function (){
+            fetch('http://yarko.ct25692.tw1.ru/api/order/' + window.location.search.replace( '?id=', ''), {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8',
+                    'Authorization': 'Bearer ' + localStorage.getItem('TOKEN')
+                },
+                body: JSON.stringify({
+                    user_id: ul.value
+                })
+            })
+                .then((response) => {
+                    if (response.status > 300) {
+                        throw response.json();
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    window.location.href = 'shiftSingle.html' + window.location.search;
+                }).catch((error) => {
+                error.then(result => {
+
+                });
+            });
+        });
+        let options = [];
+        //пропиши условия для этих вариантов
+        fetch('http://yarko.ct25692.tw1.ru/api/me', {
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('TOKEN')
-            },
+            }
         })
             .then((response) => {
                 if (response.status > 300) {
-                    throw response.json();
+                    if (response.status == 401) {
+                        window.location.href = 'login.html';
+                    }
                 }
                 return response.json();
             })
-            .then((data) => {
-                ul = document.createElement('ul');
-                let names = [];
-                data.forEach(el => {
-                    li = document.createElement('li');
-                    a = document.createElement('a');
-                    a.innerHTML = ' x ';
-                    a.addEventListener('click', function (){
-                        fetch('http://yarko.ct25692.tw1.ru/api/shift/' + window.location.search.replace( '?id=', '') + '/worker/' + el.id, {
-                            method: 'DELETE',
-                            headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem('TOKEN')
-                            }
-                        })
-                            .then((response) => {
-                                if (response.status > 300) {
-                                    throw response.json();
-                                }
-                                return response.json();
-                            })
-                            .then((data) => {
-                                window.location.href = 'shiftSingle.html' + window.location.search;
-                            })
-                            .catch((error) => {
-                                error.then(result => {
-
-                                });
-                            })
-                    })
-                    li.innerHTML = el.name;
-                    names.push(el.name);
-                    li.appendChild(a);
-                    wrapper.appendChild(li);
+            .then((data1) => {
+                if (data1.data.role == 'Мастер') {
+                    options.push('выполнен');
+                    if (data.status != 'выполнен') {
+                        options.push('отменен');
+                    }
+                }
+                if (data1.data.role == 'Админ') {
+                    options.push('оплачен');
+                    options.push('отменен');
+                }
+                options.forEach(el => {
+                    li = document.createElement('option');
+                    li.innerHTML = el;
+                    ul.appendChild(li);
                 })
                 wrapper.appendChild(ul);
-                p = document.createElement('span');
-                p.innerHTML = 'Назначить на смену:';
-                wrapper.appendChild(p);
-                fetch('http://yarko.ct25692.tw1.ru/api/worker', {
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem('TOKEN')
-                    },
-                })
-                    .then((response) => {
-                        if (response.status > 300) {
-                            throw response.json();
+                wrapper.appendChild(button);
+
+                button = document.createElement('button');
+                button.innerHTML = "Удалить заказ";
+                button.addEventListener('click', function (){
+                    fetch('http://yarko.ct25692.tw1.ru/api/order/' + window.location.search.replace( '?id=', ''), {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('TOKEN')
                         }
-                        return response.json();
                     })
-                    .then((data) => {
-                        ul = document.createElement('select');
-                        button = document.createElement('button');
-                        button.innerHTML = "Добавить";
-                        button.addEventListener('click', function (){
-                            fetch('http://yarko.ct25692.tw1.ru/api/shift/' + window.location.search.replace( '?id=', '') + '/worker', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json;charset=utf-8',
-                                    'Authorization': 'Bearer ' + localStorage.getItem('TOKEN')
-                                },
-                                body: JSON.stringify({
-                                    user_id: ul.value
-                                })
-                            })
-                                .then((response) => {
-                                    if (response.status > 300) {
-                                        throw response.json();
-                                    }
-                                    return response.json();
-                                })
-                                .then((data) => {
-                                    window.location.href = 'shiftSingle.html' + window.location.search;
-                                }).catch((error) => {
-                                error.then(result => {
-
-                                });
-                            });
-                        });
-                        data.forEach(el => {
-                            if (!names.includes(el.name)){
-                                li = document.createElement('option');
-                                li.innerHTML = el.name;
-                                li.value = el.id;
-                                ul.appendChild(li);
+                        .then((response) => {
+                            if (response.status > 300) {
+                                throw response.json();
                             }
+                            return response.json();
                         })
-                        wrapper.appendChild(ul);
-                        wrapper.appendChild(button);
-                    }).catch((error) => {
-                    error.then(result => {
-
-                    });
+                        .then((data) => {
+                            window.location.href = 'orders.html';
+                        })
                 });
-            }).catch((error) => {
-            error.then(result => {
-
-            });
-        }).catch((error) => {
-            error.then(result => {
-
-            });
-        });
+                wrapper.appendChild(button);
+            })
     });
