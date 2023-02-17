@@ -1,3 +1,21 @@
+fetch('http://yarko.ct25692.tw1.ru/api/me', {
+    headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('TOKEN')
+    }
+})
+    .then((response) => {
+        if (response.status > 300) {
+            if (response.status == 401) {
+                window.location.href = 'login.html';
+            }
+        }
+        return response.json();
+    })
+    .then((data) => {
+        if (data.data.role != 'Админ') {
+            window.location.href = 'index.html';
+        }
+    })
 let wrapper = document.querySelector(".wrapper");
 let table = document.createElement('table');
 let select = document.createElement('select');

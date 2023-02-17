@@ -48,7 +48,7 @@ fetch('http://yarko.ct25692.tw1.ru/api/order/' + window.location.search.replace(
                     'Authorization': 'Bearer ' + localStorage.getItem('TOKEN')
                 },
                 body: JSON.stringify({
-                    user_id: ul.value
+                    status_id: ul.value
                 })
             })
                 .then((response) => {
@@ -58,7 +58,7 @@ fetch('http://yarko.ct25692.tw1.ru/api/order/' + window.location.search.replace(
                     return response.json();
                 })
                 .then((data) => {
-                    window.location.href = 'shiftSingle.html' + window.location.search;
+                    window.location.href = 'orderSingle.html' + window.location.search;
                 }).catch((error) => {
                 error.then(result => {
 
@@ -82,20 +82,27 @@ fetch('http://yarko.ct25692.tw1.ru/api/order/' + window.location.search.replace(
             })
             .then((data1) => {
                 if (data1.data.role == 'Мастер') {
-                    options.push('выполнен');
+                    li = document.createElement('option');
+                    li.innerHTML = 'выполнен';
+                    li.value = 2;
+                    ul.appendChild(li);
                     if (data.status != 'выполнен') {
-                        options.push('отменен');
+                        li = document.createElement('option');
+                        li.innerHTML = 'отменен';
+                        li.value = 4;
+                        ul.appendChild(li);
                     }
                 }
                 if (data1.data.role == 'Админ') {
-                    options.push('оплачен');
-                    options.push('отменен');
-                }
-                options.forEach(el => {
                     li = document.createElement('option');
-                    li.innerHTML = el;
+                    li.innerHTML = 'оплачен';
+                    li.value = 3;
                     ul.appendChild(li);
-                })
+                    li = document.createElement('option');
+                    li.innerHTML = 'отменен';
+                    li.value = 4;
+                    ul.appendChild(li);
+                }
                 wrapper.appendChild(ul);
                 wrapper.appendChild(button);
 
