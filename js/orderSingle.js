@@ -36,6 +36,9 @@ fetch('http://yarko.ct25692.tw1.ru/api/order/' + window.location.search.replace(
         p = document.createElement('p');
         p.innerHTML = 'Стоимость: ' + data.total_price;
         wrapper.appendChild(p);
+        p = document.createElement('p');
+        p.innerHTML = 'Работники:';
+        wrapper.appendChild(p);
 
         ul = document.createElement('select');
         button = document.createElement('button');

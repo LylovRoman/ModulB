@@ -1,3 +1,27 @@
+let isMaster = false;
+let name = '';
+fetch('http://yarko.ct25692.tw1.ru/api/me', {
+    headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('TOKEN')
+    }
+})
+    .then((response) => {
+        if (response.status > 300) {
+            if (response.status == 401) {
+                window.location.href = 'login.html';
+            }
+        }
+        return response.json();
+    })
+    .then((data) => {
+        if (data.data.role != 'Админ' && data.data.role != 'Мастер') {
+            window.location.href = 'index.html';
+        }
+        if (data.data.role == 'Мастер') {
+            isMaster = true;
+            name = data.data.name;
+        }
+    })
 let wrapper = document.querySelector(".wrapper");
 let table = document.createElement('table');
 table.classList.add('border-collapse');
@@ -76,59 +100,61 @@ fetch('http://yarko.ct25692.tw1.ru/api/order', {
     table.appendChild(row);
 
     data.forEach(el => {
-        row = document.createElement('tr');
-        column = document.createElement('td');
-        column.innerHTML = el.id;
-        column.classList.add('border-slate-300');
-        column.classList.add('border');
-        column.classList.add('border-dark');
-        column.classList.add('text-center');
-        column.classList.add('bg-[#ffffff]');
-        row.appendChild(column);
-        column = document.createElement('td');
-        column.innerHTML = el.client.name;
-        column.classList.add('border-slate-300');
-        column.classList.add('border');
-        column.classList.add('border-dark');
-        column.classList.add('text-center');
-        column.classList.add('bg-[#ffffff]');
-        row.appendChild(column);
-        column = document.createElement('td');
-        column.innerHTML = el.master ? el.master.name : "не назначен";
-        column.classList.add('border-slate-300');
-        column.classList.add('border');
-        column.classList.add('border-dark');
-        column.classList.add('text-center');
-        column.classList.add('bg-[#ffffff]');
-        row.appendChild(column);
-        column = document.createElement('td');
-        column.innerHTML = el.status;
-        column.classList.add('border-slate-300');
-        column.classList.add('border');
-        column.classList.add('border-dark');
-        column.classList.add('text-center');
-        column.classList.add('bg-[#ffffff]');
-        row.appendChild(column);
-        column = document.createElement('td');
-        column.innerHTML = el.total_price;
-        column.classList.add('border-slate-300');
-        column.classList.add('border');
-        column.classList.add('border-dark');
-        column.classList.add('text-center');
-        column.classList.add('bg-[#ffffff]');
-        row.appendChild(column);
-        column = document.createElement('td');
-        button = document.createElement('a');
-        button.href = 'orderSingle.html?id=' + el.id;
-        button.innerHTML = 'Показать';
-        column.classList.add('border-slate-300');
-        column.classList.add('border');
-        column.classList.add('border-dark');
-        column.classList.add('text-center');
-        column.classList.add('bg-[#ffffff]');
-        column.appendChild(button);
-        row.appendChild(column);
-        table.appendChild(row);
+        if ((window.location.search.replace( '?myOrders=', '') != 'true') || (isMaster && (name == el.master))){
+            row = document.createElement('tr');
+            column = document.createElement('td');
+            column.innerHTML = el.id;
+            column.classList.add('border-slate-300');
+            column.classList.add('border');
+            column.classList.add('border-dark');
+            column.classList.add('text-center');
+            column.classList.add('bg-[#ffffff]');
+            row.appendChild(column);
+            column = document.createElement('td');
+            column.innerHTML = el.client.name;
+            column.classList.add('border-slate-300');
+            column.classList.add('border');
+            column.classList.add('border-dark');
+            column.classList.add('text-center');
+            column.classList.add('bg-[#ffffff]');
+            row.appendChild(column);
+            column = document.createElement('td');
+            column.innerHTML = el.master ? el.master : "не назначен";
+            column.classList.add('border-slate-300');
+            column.classList.add('border');
+            column.classList.add('border-dark');
+            column.classList.add('text-center');
+            column.classList.add('bg-[#ffffff]');
+            row.appendChild(column);
+            column = document.createElement('td');
+            column.innerHTML = el.status;
+            column.classList.add('border-slate-300');
+            column.classList.add('border');
+            column.classList.add('border-dark');
+            column.classList.add('text-center');
+            column.classList.add('bg-[#ffffff]');
+            row.appendChild(column);
+            column = document.createElement('td');
+            column.innerHTML = el.total_price;
+            column.classList.add('border-slate-300');
+            column.classList.add('border');
+            column.classList.add('border-dark');
+            column.classList.add('text-center');
+            column.classList.add('bg-[#ffffff]');
+            row.appendChild(column);
+            column = document.createElement('td');
+            button = document.createElement('a');
+            button.href = 'orderSingle.html?id=' + el.id;
+            button.innerHTML = 'Показать';
+            column.classList.add('border-slate-300');
+            column.classList.add('border');
+            column.classList.add('border-dark');
+            column.classList.add('text-center');
+            column.classList.add('bg-[#ffffff]');
+            column.appendChild(button);
+            row.appendChild(column);
+            table.appendChild(row);
+        }
     })
     wrapper.appendChild(table);
 }).catch((error) => {
