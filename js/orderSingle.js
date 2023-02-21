@@ -97,10 +97,12 @@ fetch('http://yarko.ct25692.tw1.ru/api/order/' + window.location.search.replace(
                     }
                 }
                 if (data1.data.role == 'Админ') {
-                    li = document.createElement('option');
-                    li.innerHTML = 'оплачен';
-                    li.value = 3;
-                    ul.appendChild(li);
+                    if (data.status == 'выполнен'){
+                        li = document.createElement('option');
+                        li.innerHTML = 'оплачен';
+                        li.value = 3;
+                        ul.appendChild(li);
+                    }
                     li = document.createElement('option');
                     li.innerHTML = 'отменен';
                     li.value = 4;

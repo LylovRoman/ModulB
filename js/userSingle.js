@@ -32,7 +32,7 @@ fetch('http://yarko.ct25692.tw1.ru/api/user/' + window.location.search.replace( 
         wrapper.appendChild(p);
         if (data.role == 'Мастер') {
             p = document.createElement('p');
-            p.innerHTML = 'Статус: ' + (data.is_fired ? 'уволен' : 'работает');
+            p.innerHTML = 'Статус: ' + ((data.is_fired != 1) ? 'уволен' : 'работает');
             wrapper.appendChild(p);
             button = document.createElement('button');
             button.innerHTML = "Уволить";
@@ -40,7 +40,8 @@ fetch('http://yarko.ct25692.tw1.ru/api/user/' + window.location.search.replace( 
                 fetch('http://yarko.ct25692.tw1.ru/api/user/' + window.location.search.replace( '?id=', ''), {
                     method: 'PATCH',
                     headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem('TOKEN')
+                        'Authorization': 'Bearer ' + localStorage.getItem('TOKEN'),
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
                         is_fired: 1
@@ -53,8 +54,7 @@ fetch('http://yarko.ct25692.tw1.ru/api/user/' + window.location.search.replace( 
                         return response.json();
                     })
                     .then((data) => {
-                        console.log(data);
-                        //window.location.href = 'userSingle.html?id=' + window.location.search.replace( '?id=', '');
+                        window.location.href = 'userSingle.html?id=' + window.location.search.replace( '?id=', '');
                     })
             });
             wrapper.appendChild(button);

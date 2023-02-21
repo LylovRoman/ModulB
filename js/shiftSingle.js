@@ -89,11 +89,6 @@ fetch('http://yarko.ct25692.tw1.ru/api/shift/' + window.location.search.replace(
                             .then((data) => {
                                 window.location.href = 'shiftSingle.html' + window.location.search;
                             })
-                            .catch((error) => {
-                                error.then(result => {
-                                    console.log(result);
-                                });
-                            })
                     })
                     li.innerHTML = el.name;
                     names.push(el.name);
@@ -156,9 +151,4 @@ fetch('http://yarko.ct25692.tw1.ru/api/shift/' + window.location.search.replace(
                         wrapper.appendChild(button);
                     })
             })
-    .catch((error) => {
-        error.then(result => {
-            console.log(result);
-        });
-    });
 });
